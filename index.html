@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .automation {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .automation h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .buttons {
+            margin-top: 1rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+            font-size: 0.9rem;
+        }
+        input {
+            padding: 0.5rem;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Automation Dashboard</h1>
+
+        <div class="automation">
+            <h2>Automation 1</h2>
+            <p>Description: This automation sends a daily email report.</p>
+
+            <div class="buttons">
+                <button onclick="triggerAutomation('automation1')">Run Now</button>
+            </div>
+
+            <label for="frequency-automation1">Update Frequency (in hours):</label>
+            <input type="number" id="frequency-automation1" min="1" value="24">
+            <button onclick="updateFrequency('automation1')">Update</button>
+        </div>
+
+        <div class="automation">
+            <h2>Automation 2</h2>
+            <p>Description: This automation backs up user data weekly.</p>
+
+            <div class="buttons">
+                <button onclick="triggerAutomation('automation2')">Run Now</button>
+            </div>
+
+            <label for="frequency-automation2">Update Frequency (in days):</label>
+            <input type="number" id="frequency-automation2" min="1" value="7">
+            <button onclick="updateFrequency('automation2')">Update</button>
+        </div>
+    </div>
+
+    <script>
+        function triggerAutomation(automationId) {
+            fetch('https://hooks.make.com/YOUR_WEBHOOK_URL', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    automationId: automationId
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Automation triggered successfully!');
+                } else {
+                    alert('Failed to trigger automation.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function updateFrequency(automationId) {
+            const inputId = `frequency-${automationId}`;
+            const frequency = document.getElementById(inputId).value;
+
+            fetch('https://your-server-url.com/update-frequency', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    automationId: automationId,
+                    frequency: frequency
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Frequency updated successfully!');
+                } else {
+                    alert('Failed to update frequency.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
